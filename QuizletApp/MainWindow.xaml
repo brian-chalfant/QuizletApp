@@ -7,12 +7,17 @@
         <!-- Menu Bar -->
         <Menu DockPanel.Dock="Top" Background="#3B4D61">
             <MenuItem Header="_File" Background="#3B4D61" Foreground="Black">
-                <MenuItem Header="_Load CSV" Background="#3B4D61" Click="LoadCSV_Click"/>
+                <MenuItem Header="_Load CSV" Click="LoadCSV_Click"/>
                 <Separator/>
-                <MenuItem Header="_Exit" Background="#3B4D61" Click="Exit_Click"/>
-                <MenuItem Header="-Recent" Name="RecentFilesMenu">
+
+                <MenuItem Header="_Recent" Name="RecentFilesMenu">
                     <MenuItem Header="No Recent Files"/>
                 </MenuItem>
+                <MenuItem Header="Clear Recent Files" Click="MenuItem_Click"/>
+                <Separator/>
+                <MenuItem Header="Preferences" Click="PreferencesMenuItem_Click"/>
+                <Separator/>
+                <MenuItem Header="_Exit" Click="Exit_Click"/>
             </MenuItem>
         </Menu>
 
@@ -33,7 +38,7 @@
             <TextBlock x:Name="QuestionTextBlock" FontSize="20" TextWrapping="Wrap" Text="Load Your CSV File"
                        Margin="0,10,0,20" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI"/>
 
-            <StackPanel x:Name="AnswersPanel" Margin="120,120,0,50">
+            <StackPanel x:Name="AnswersPanel" Margin="120,120,0,0" Height="226" VerticalAlignment="Top">
                 <RadioButton x:Name="OptionA" Visibility="Collapsed" Margin="5" Content="Option A" FontSize="16" GroupName="Answers" Checked="RadioButton_Checked" Style="{StaticResource {x:Type RadioButton}}"/>
                 <RadioButton x:Name="OptionB" Visibility="Collapsed" Margin="5" Content="Option B" FontSize="16" GroupName="Answers" Checked="RadioButton_Checked" Style="{StaticResource {x:Type RadioButton}}"/>
                 <RadioButton x:Name="OptionC" Visibility="Collapsed" Margin="5" Content="Option C" FontSize="16" GroupName="Answers" Checked="RadioButton_Checked" Style="{StaticResource {x:Type RadioButton}}"/>

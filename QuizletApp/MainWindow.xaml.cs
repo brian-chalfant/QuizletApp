@@ -148,13 +148,24 @@ namespace QuizletApp
             {
                 PrevButton.IsEnabled = true;
             }
-
             var question = questions[currentQuestionIndex];
+
+            //Add the possible answers to a list
+            var possibleAnswers = new List<string>();
+            possibleAnswers.Add(question.OptionA);
+            possibleAnswers.Add(question.OptionB);
+            possibleAnswers.Add(question.OptionC);
+            possibleAnswers.Add(question.OptionD);
+
+            //Shuffle that list so correct answers are not always in the same place
+            Random rg = new Random();
+            possibleAnswers.Shuffle<string>(rg);
+
             QuestionTextBlock.Text = question.Text;
-            OptionA.Content = question.OptionA;
-            OptionB.Content = question.OptionB;
-            OptionC.Content = question.OptionC;
-            OptionD.Content = question.OptionD;
+            OptionA.Content = possibleAnswers[0];
+            OptionB.Content = possibleAnswers[1];
+            OptionC.Content = possibleAnswers[2];
+            OptionD.Content = possibleAnswers[3];
             QuestionNumberBlock.Text = (currentQuestionIndex + 1).ToString();
 
             // Clear any existing radio button selection
@@ -382,6 +393,33 @@ namespace QuizletApp
             NextButton.Content = "Restart";
         }
 
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            File.WriteAllText(recentFilesPath, string.Empty);
+            recentFiles.Clear();
+            UpdateRecentFilesMenu();
+        }
 
+        private void PreferencesMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            PreferencesWindows preferencesWindows = new PreferencesWindows();
+            preferencesWindows.Show();
+        }
+    }
+
+
+    //Thanks Jason on StackOverflow for this handly little Shuffle Function. Super Handy.
+    static class IListExtensions
+    {
+        public static void Shuffle<T>(this IList<T> list, Random rg)
+        {
+            for (int i = list.Count; i > 1; i--)
+            {
+                int k = rg.Next(i);
+                T temp = list[k];
+                list[k] = list[i - 1];
+                list[i - 1] = temp;
+            }
+        }
     }
 }
