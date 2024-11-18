@@ -1,0 +1,73 @@
+﻿<Window x:Class="QuizletApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" xmlns:Syncfusion="clr-namespace:Syncfusion.UI.Xaml.ProgressBar;assembly=Syncfusion.SfProgressBar.WPF"
+        Title="QuizletApp" Height="450" Width="800" Background="LightSeaGreen">
+    <DockPanel>
+        <!-- Menu Bar -->
+        <Menu DockPanel.Dock="Top" Background="#3B4D61">
+            <MenuItem Header="_File" Background="#3B4D61" Foreground="Black">
+                <MenuItem Header="_Load CSV" Background="#3B4D61" Click="LoadCSV_Click"/>
+                <Separator/>
+                <MenuItem Header="_Exit" Background="#3B4D61" Click="Exit_Click"/>
+                <MenuItem Header="-Recent" Name="RecentFilesMenu">
+                    <MenuItem Header="No Recent Files"/>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <Grid Margin="10">
+            <!-- Stylish Question Number Button -->
+            <TextBlock x:Name="QuestionNumberBlock" Visibility="Collapsed" FontSize="200" HorizontalAlignment="Left" Foreground="Green"
+                       Width="500" Height="300" Text="1" FontWeight="Bold" 
+                       Margin="0,86,0,10">
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="DarkGreen" Direction="315" ShadowDepth="10" Opacity="0.3" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button x:Name="LoadButton" Visibility="Visible" Content="Load CSV" Width="120" Height="40" Margin="10" Click="LoadCSV_Click" Background="#007BFF" Foreground="White" BorderBrush="#0069D9" BorderThickness="2" FontWeight="Bold" FontSize="16">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" Direction="315" ShadowDepth="4" Opacity="0.3" />
+                </Button.Effect>
+            </Button>
+            <TextBlock x:Name="QuestionTextBlock" FontSize="20" TextWrapping="Wrap" Text="Load Your CSV File"
+                       Margin="0,10,0,20" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI"/>
+
+            <StackPanel x:Name="AnswersPanel" Margin="120,120,0,50">
+                <RadioButton x:Name="OptionA" Visibility="Collapsed" Margin="5" Content="Option A" FontSize="16" GroupName="Answers" Checked="RadioButton_Checked" Style="{StaticResource {x:Type RadioButton}}"/>
+                <RadioButton x:Name="OptionB" Visibility="Collapsed" Margin="5" Content="Option B" FontSize="16" GroupName="Answers" Checked="RadioButton_Checked" Style="{StaticResource {x:Type RadioButton}}"/>
+                <RadioButton x:Name="OptionC" Visibility="Collapsed" Margin="5" Content="Option C" FontSize="16" GroupName="Answers" Checked="RadioButton_Checked" Style="{StaticResource {x:Type RadioButton}}"/>
+                <RadioButton x:Name="OptionD" Visibility="Collapsed" Margin="5" Content="Option D" FontSize="16" GroupName="Answers" Checked="RadioButton_Checked" Style="{StaticResource {x:Type RadioButton}}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20">
+                <Button x:Name="PrevButton" Visibility="Collapsed" Content="Previous" Width="120" Height="40" Margin="10" Click="PrevButton_Click" Background="#007BFF" Foreground="White" BorderBrush="#0069D9" BorderThickness="2" FontWeight="Bold" FontSize="16">
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" Direction="315" ShadowDepth="4" Opacity="0.3" />
+                    </Button.Effect>
+                </Button>
+                <Button x:Name="SubmitButton" Visibility="Collapsed" Content="Check" Width="120" Height="40" Margin="10" Click="SubmitButton_Click" Background="#28A745" Foreground="White" BorderBrush="#218838" BorderThickness="2" FontWeight="Bold" FontSize="16">
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" Direction="315" ShadowDepth="4" Opacity="0.3" />
+                    </Button.Effect>
+                </Button>
+                <Button x:Name="NextButton" Visibility="Collapsed" Content="Next" Width="120" Height="40" Margin="10" Click="NextButton_Click" Background="#007BFF" Foreground="White" BorderBrush="#0069D9" BorderThickness="2" FontWeight="Bold" FontSize="16">
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" Direction="315" ShadowDepth="4" Opacity="0.3" />
+                    </Button.Effect>
+                </Button>
+            </StackPanel>
+            
+            <Syncfusion:SfCircularProgressBar x:Name="sfCircularProgressBar" Visibility="Collapsed" IsIndeterminate="False" ShowProgressValue="True" ProgressColor="BlueViolet" SegmentCount="4" IndicatorOuterRadius="0.75" IndicatorInnerRadius="0.6" TrackOuterRadius="0.6" TrackInnerRadius="0.75" Margin="40,20,40,50">
+                <Syncfusion:SfCircularProgressBar.RangeColors>
+                    <Syncfusion:RangeColorCollection>
+                        <Syncfusion:RangeColor Color="BlueViolet" Start="0" End="25" />
+                        <Syncfusion:RangeColor Color="BlueViolet" Start="25" End="50" />
+                        <Syncfusion:RangeColor Color="BlueViolet" Start="50" End="75" />
+                        <Syncfusion:RangeColor Color="BlueViolet" Start="75" End="100" />
+                    </Syncfusion:RangeColorCollection>
+                </Syncfusion:SfCircularProgressBar.RangeColors>
+            </Syncfusion:SfCircularProgressBar>
+        </Grid>
+    </DockPanel>
+</Window>
