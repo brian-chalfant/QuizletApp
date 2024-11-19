@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <PackageIcon>games.ico</PackageIcon>
     <ApplicationIcon>games.ico</ApplicationIcon>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +24,6 @@
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="33.0.1" />
-    <PackageReference Include="Syncfusion.SfProgressBar.WPF" Version="27.2.2" />
   </ItemGroup>
 
   <ItemGroup>

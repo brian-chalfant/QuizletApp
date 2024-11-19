@@ -23,7 +23,7 @@ namespace QuizletApp
     public partial class MainWindow : Window
     {
         //Holds List of Questions for Current Quiz
-        private List<Question> questions;
+        public required List<Question> questions;
         //Index of Current Question
         private int currentQuestionIndex = 0;
         //Holds user Answers <QuestionNumber, Answer> 
@@ -107,8 +107,6 @@ namespace QuizletApp
             currentQuestionIndex = 0;  // Reset to first question
             userAnswers.Clear(); // Clear the stored user answers
                                  // Set the progress value for the circular progress bar
-            sfCircularProgressBar.Progress = 0;
-            sfCircularProgressBar.Visibility = Visibility.Collapsed;
             SubmitButton.Visibility = Visibility.Visible;
             QuestionNumberBlock.Visibility = Visibility.Visible;
             QuestionTextBlock.Visibility = Visibility.Visible;
@@ -381,9 +379,6 @@ namespace QuizletApp
             // Calculate the percentage of correct and incorrect answers
             double correctPercentage = (double)correctAnswers / questions.Count;
 
-            // Set the progress value for the circular progress bar
-            sfCircularProgressBar.Progress = correctPercentage * 100;
-            sfCircularProgressBar.Visibility = Visibility.Visible;
 
             // Hide Questions
             QuestionTextBlock.Text = "";
