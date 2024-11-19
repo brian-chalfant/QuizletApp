@@ -115,6 +115,7 @@ namespace QuizletApp
             OptionC.Visibility = Visibility.Visible;
             OptionD.Visibility = Visibility.Visible;
             LoadButton.Visibility = Visibility.Collapsed;
+            ScoreTextBlock.Visibility = Visibility.Collapsed;
             NextButton.Visibility = Visibility.Visible;
             NextButton.Content = "Next";
             PrevButton.Visibility = Visibility.Visible;
@@ -377,7 +378,7 @@ namespace QuizletApp
 
             // Calculate and display the score
             // Calculate the percentage of correct and incorrect answers
-            double correctPercentage = (double)correctAnswers / questions.Count;
+            double correctPercentage = ((double)correctAnswers / questions.Count) * 100;
 
 
             // Hide Questions
@@ -388,7 +389,9 @@ namespace QuizletApp
             OptionD.Visibility = Visibility.Collapsed;
             QuestionNumberBlock.Text = "";
             SubmitButton.Visibility = Visibility.Collapsed;
-            PrevButton.Visibility = Visibility.Collapsed;   
+            PrevButton.Visibility = Visibility.Collapsed;
+            ScoreTextBlock.Text = $"You Scored {correctPercentage:F2}%!";
+            ScoreTextBlock.Visibility = Visibility.Visible;
             NextButton.Content = "Restart";
         }
 

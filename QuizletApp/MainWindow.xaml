@@ -37,11 +37,15 @@
             <TextBlock x:Name="QuestionTextBlock" FontSize="20" TextWrapping="Wrap" Text="Load Your CSV File"
                        Margin="0,10,0,20" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI"/>
 
-            <StackPanel x:Name="AnswersPanel" Margin="120,120,0,0" Height="226" VerticalAlignment="Top">
+            <StackPanel x:Name="AnswersPanel" Margin="192,120,0,0" Height="226" VerticalAlignment="Top">
                 <RadioButton x:Name="OptionA" Visibility="Collapsed" Margin="5" Content="Option A" FontSize="16" GroupName="Answers" Checked="RadioButton_Checked" Style="{StaticResource {x:Type RadioButton}}"/>
                 <RadioButton x:Name="OptionB" Visibility="Collapsed" Margin="5" Content="Option B" FontSize="16" GroupName="Answers" Checked="RadioButton_Checked" Style="{StaticResource {x:Type RadioButton}}"/>
                 <RadioButton x:Name="OptionC" Visibility="Collapsed" Margin="5" Content="Option C" FontSize="16" GroupName="Answers" Checked="RadioButton_Checked" Style="{StaticResource {x:Type RadioButton}}"/>
                 <RadioButton x:Name="OptionD" Visibility="Collapsed" Margin="5" Content="Option D" FontSize="16" GroupName="Answers" Checked="RadioButton_Checked" Style="{StaticResource {x:Type RadioButton}}"/>
+            </StackPanel>
+
+            <StackPanel x:Name="ScorePanel" Height="100" Width="400">
+                <TextBlock x:Name="ScoreTextBlock" Text="You Scored 99%!" Visibility="Collapsed" FontFamily="Impact, SansSerif" FontSize="42" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20">
