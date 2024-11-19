@@ -158,8 +158,12 @@ namespace QuizletApp
             possibleAnswers.Add(question.OptionD);
 
             //Shuffle that list so correct answers are not always in the same place
-            Random rg = new Random();
-            possibleAnswers.Shuffle<string>(rg);
+            if (Properties.Settings.Default.Randomization)
+            {
+                Random rg = new Random();
+                possibleAnswers.Shuffle<string>(rg);
+            }
+
 
             QuestionTextBlock.Text = question.Text;
             OptionA.Content = possibleAnswers[0];

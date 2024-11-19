@@ -63,13 +63,12 @@
                 </Button>
             </StackPanel>
             
-            <Syncfusion:SfCircularProgressBar x:Name="sfCircularProgressBar" Visibility="Collapsed" IsIndeterminate="False" ShowProgressValue="True" ProgressColor="BlueViolet" SegmentCount="4" IndicatorOuterRadius="0.75" IndicatorInnerRadius="0.6" TrackOuterRadius="0.6" TrackInnerRadius="0.75" Margin="40,20,40,50">
+            <Syncfusion:SfCircularProgressBar x:Name="sfCircularProgressBar" Visibility="Collapsed" IsIndeterminate="False" ShowProgressValue="True" ProgressColor="Blue" IndicatorOuterRadius="0.75" IndicatorInnerRadius="0.6" TrackOuterRadius="0.6" TrackInnerRadius="0.75" Margin="40,20,40,50">
                 <Syncfusion:SfCircularProgressBar.RangeColors>
                     <Syncfusion:RangeColorCollection>
-                        <Syncfusion:RangeColor Color="BlueViolet" Start="0" End="25" />
-                        <Syncfusion:RangeColor Color="BlueViolet" Start="25" End="50" />
-                        <Syncfusion:RangeColor Color="BlueViolet" Start="50" End="75" />
-                        <Syncfusion:RangeColor Color="BlueViolet" Start="75" End="100" />
+                        <Syncfusion:RangeColor IsGradient="True" Color="SkyBlue" Start="10" End="30"/>
+                        <Syncfusion:RangeColor IsGradient="True" Color="DeepSkyBlue" Start="30" End="60"/>
+                        <Syncfusion:RangeColor IsGradient="True" Color="Blue" Start="60" End="100"/>
                     </Syncfusion:RangeColorCollection>
                 </Syncfusion:SfCircularProgressBar.RangeColors>
             </Syncfusion:SfCircularProgressBar>
