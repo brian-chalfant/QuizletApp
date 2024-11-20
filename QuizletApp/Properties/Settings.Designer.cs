@@ -38,12 +38,24 @@ namespace QuizletApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool Randomization {
+        public bool ARandomization {
             get {
-                return ((bool)(this["Randomization"]));
+                return ((bool)(this["ARandomization"]));
             }
             set {
-                this["Randomization"] = value;
+                this["ARandomization"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool QRandomization {
+            get {
+                return ((bool)(this["QRandomization"]));
+            }
+            set {
+                this["QRandomization"] = value;
             }
         }
     }

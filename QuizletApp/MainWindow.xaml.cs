@@ -7,6 +7,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -20,6 +21,12 @@ namespace QuizletApp
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// TODO: Add hotkeys for Quicker Testing DONE!!!!
+    /// TODO: Add Scalability to the Interface NOT DONE, But did make interface Larger
+    /// TODO: Eventually add Database and Quiz Creation
+    /// TODO: Randomize Questions DONE!
+    /// TODO: Slide up window to visualize HotKeys
+    /// TODO: Change Checking to an Icon in the window, not a message box. Similarly When Preferences are saved use a statusbar at the bottom?
     public partial class MainWindow : Window
     {
         //Holds List of Questions for Current Quiz
@@ -27,9 +34,9 @@ namespace QuizletApp
         //Index of Current Question
         private int currentQuestionIndex = 0;
         //Holds user Answers <QuestionNumber, Answer> 
-        private Dictionary<int, string> userAnswers = new Dictionary<int, string>();
+        private Dictionary<int, string> userAnswers = new();
         //Holds List of Recent Files
-        private List<string> recentFiles = new List<string>();
+        private List<string> recentFiles = new();
         //FilePath of Stored Recent Files
         private const string recentFilesPath = "recent.csv";
 
@@ -40,6 +47,9 @@ namespace QuizletApp
             InitializeComponent();
             DisplayQuestion(true);
             LoadRecentFiles();
+            AddHotKeys();
+            SetTheme();
+            this.PreviewKeyDown += MainWindow_PreviewKeyDown;
         }
 
 
@@ -157,9 +167,9 @@ namespace QuizletApp
             possibleAnswers.Add(question.OptionD);
 
             //Shuffle that list so correct answers are not always in the same place
-            if (Properties.Settings.Default.Randomization)
+            if (Properties.Settings.Default.ARandomization)
             {
-                Random rg = new Random();
+                Random rg = new();
                 possibleAnswers.Shuffle<string>(rg);
             }
 
@@ -345,6 +355,8 @@ namespace QuizletApp
                 {
                     questions = csv.GetRecords<Question>().ToList();
                     MessageBox.Show($"Successfully loaded {questions.Count} questions.");
+                    Random rg = new();
+                    questions.Shuffle<Question>(rg);
                 }
             }
             catch (Exception ex)
@@ -404,9 +416,174 @@ namespace QuizletApp
 
         private void PreferencesMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            PreferencesWindows preferencesWindows = new PreferencesWindows();
+            PreferencesWindows preferencesWindows = new();
             preferencesWindows.Show();
         }
+
+        private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.A)
+            {
+                ClickRadioButton1();
+            }
+            else if (e.Key == Key.S)
+            {
+                ClickRadioButton2();
+            }
+            else if (e.Key == Key.D)
+            {
+                ClickRadioButton3();
+            }
+            else if (e.Key == Key.F)
+            {
+                ClickRadioButton4();
+            }
+        }
+
+        //Keyboard Actions
+        private void AddHotKeys()
+        {
+            try
+            {
+                RoutedCommand nextCommand = new();
+                nextCommand.InputGestures.Add(new KeyGesture(Key.Right, ModifierKeys.None));
+                CommandBindings.Add(new CommandBinding(nextCommand, NextButton_Click, CanExecuteAlways));
+
+                RoutedCommand prevCommand = new();
+                prevCommand.InputGestures.Add(new KeyGesture(Key.Left, ModifierKeys.None));
+                CommandBindings.Add(new CommandBinding(prevCommand, PrevButton_Click, CanExecuteAlways2));
+
+                RoutedCommand checkCommand = new();
+                checkCommand.InputGestures.Add(new KeyGesture(Key.Down, ModifierKeys.None));
+                CommandBindings.Add(new CommandBinding(checkCommand, SubmitButton_Click, CanExecuteAlways));
+
+
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("Something went wrong" + err.ToString());
+            }
+        }
+
+        private void CanExecuteAlways(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if(NextButton.IsEnabled && NextButton.IsVisible)
+            {
+                e.CanExecute = true; // This ensures the command is always executable
+            } else
+            {
+                e.CanExecute = false;
+            }
+
+        }
+        private void CanExecuteAlways2(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (PrevButton.IsEnabled && PrevButton.IsVisible)
+            {
+                e.CanExecute = true; // This ensures the command is always executable
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+
+        }
+
+        private void MyFirstEventHandler(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("Sent");
+            NextButton_Click(sender,e);
+        }
+
+        private void ClickRadioButton1()
+        {
+            OptionA.IsChecked = true;
+        }
+        private void ClickRadioButton2()
+        {
+            OptionB.IsChecked = true;
+        }
+        private void ClickRadioButton3()
+        {
+            OptionC.IsChecked = true;
+        }
+        private void ClickRadioButton4()
+        {
+            OptionD.IsChecked = true;
+        }
+
+        public void SetTheme()
+        {
+            DropShadowEffect QuestionNumberBlockdse = (DropShadowEffect)QuestionNumberBlock.Effect;
+            DropShadowEffect LoadButtondse = (DropShadowEffect)LoadButton.Effect;
+            DropShadowEffect PrevButtondse = (DropShadowEffect)PrevButton.Effect;
+            DropShadowEffect NextButtondse = (DropShadowEffect)NextButton.Effect;
+            DropShadowEffect SubmitButtondse = (DropShadowEffect)SubmitButton.Effect;
+            Color Background;
+            Color QuestionNumberDropShadow;
+            Color DropShadow;
+            Color Foreground;
+            Color QuestionNumber;
+            Color SubmitBtnColor;
+            Color OtherBtnColor;
+            Color OtherBtnBorder;
+            Color SubmitBtnBorder;
+
+
+            if (Properties.Settings.Default.DarkMode)
+            {
+                Background = Colors.DarkSlateGray; //Background Color
+                QuestionNumberDropShadow = Colors.ForestGreen;  //QuestionNumber DropShadow color
+                DropShadow = Colors.Black;    //Drop Shadow
+                Foreground = Colors.White;  //Foreground
+                QuestionNumber = Colors.LimeGreen;  //Question Number Color
+                SubmitBtnColor = (Color)ColorConverter.ConvertFromString("#1F8A55"); //SubmitButton
+                OtherBtnColor = (Color)ColorConverter.ConvertFromString("#0056B3"); //Other Buttons
+                OtherBtnBorder = (Color)ColorConverter.ConvertFromString("#004085");  //Other Buttons Border
+                SubmitBtnBorder = (Color)ColorConverter.ConvertFromString("#0B6C35"); //SubmitButton Border
+
+
+            } else
+            {
+
+                Background = Colors.LightSeaGreen; //Background Color
+                QuestionNumberDropShadow = Colors.DarkGreen;  //QuestionNumber DropShadow color
+                DropShadow = Colors.Black;    //Drop Shadow
+                Foreground = Colors.Black;  //Foreground
+                QuestionNumber = Colors.Green;  //Question Number Color
+                SubmitBtnColor = (Color)ColorConverter.ConvertFromString("#28A745"); //SubmitButton
+                OtherBtnColor = (Color)ColorConverter.ConvertFromString("#007BFF"); //Other Buttons
+                OtherBtnBorder = (Color)ColorConverter.ConvertFromString("#0069D9");  //Other Buttons Border
+                SubmitBtnBorder = (Color)ColorConverter.ConvertFromString("#218838"); //SubmitButton Border
+            }
+
+            QAppMainWindow.Background = new SolidColorBrush(Background);
+            QAppMainWindow.Foreground = new SolidColorBrush(Foreground);
+            QuestionNumberBlock.Foreground = new SolidColorBrush(QuestionNumber);
+            QuestionNumberBlockdse.Color = QuestionNumberDropShadow;
+            LoadButtondse.Color = DropShadow;
+            PrevButtondse.Color = DropShadow;
+            NextButtondse.Color = DropShadow;
+            SubmitButtondse.Color = DropShadow;
+            OptionA.Foreground = new SolidColorBrush(Foreground);
+            OptionB.Foreground = new SolidColorBrush(Foreground);
+            OptionC.Foreground = new SolidColorBrush(Foreground);
+            OptionD.Foreground = new SolidColorBrush(Foreground);
+            LoadButton.Background = new SolidColorBrush(OtherBtnColor);
+            LoadButton.Foreground = new SolidColorBrush(Foreground);
+            LoadButton.BorderBrush = new SolidColorBrush(OtherBtnBorder);
+            PrevButton.Background = new SolidColorBrush(OtherBtnColor);
+            PrevButton.Foreground = new SolidColorBrush(Foreground);
+            PrevButton.BorderBrush = new SolidColorBrush(OtherBtnBorder);
+            NextButton.Background = new SolidColorBrush(OtherBtnColor);
+            NextButton.Foreground = new SolidColorBrush(Foreground);
+            NextButton.BorderBrush = new SolidColorBrush(OtherBtnBorder);
+            SubmitButton.Background = new SolidColorBrush(SubmitBtnColor);
+            SubmitButton.Foreground = new SolidColorBrush(Foreground);
+            SubmitButton.BorderBrush = new SolidColorBrush(SubmitBtnBorder);
+        }
+
     }
 
 

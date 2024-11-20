@@ -11,7 +11,8 @@
         <StackPanel Margin="10">
             <TextBlock Text="Preferences" FontSize="16" FontWeight="Bold" />
             <CheckBox Content="Enable Dark Mode" Name="chkDarkMode" Margin="0,10,0,0"/>
-            <CheckBox Content="Enable Question Randomization" Name="chkNotifications" />
+            <CheckBox Content="Randomize Order of Questions" Name="chkQustions" />
+            <CheckBox Content="Randomize Order of Answers" Name="chkAnswers" />
             <Button Content="Save" Name="btnSave" Width="80" HorizontalAlignment="Right" Margin="0,20,0,0" Click="btnSave_Click"/>
         </StackPanel>
     </Grid>
