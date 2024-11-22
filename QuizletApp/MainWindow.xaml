@@ -46,7 +46,7 @@
             </StackPanel>
 
             <StackPanel x:Name="ScorePanel" Height="100" Width="400">
-                <TextBlock x:Name="ScoreTextBlock" Text="You Scored 99%!" Visibility="Collapsed" FontFamily="Impact, SansSerif" FontSize="42" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="ScoreTextBlock" Text="You Scored 99%!" Visibility="Collapsed" FontFamily="Impact, SansSerif" FontSize="42" TextAlignment="Left" Height="279" Width="427" RenderTransformOrigin="0.701,0.497"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,606,0,0" Height="72">
@@ -66,6 +66,26 @@
                     </Button.Effect>
                 </Button>
             </StackPanel>
+            <Border x:Name="SlideUpPanel" Background="#2C3E50" Height="180" Width="200" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+        BorderThickness="1" BorderBrush="White">
+                <Border.RenderTransform>
+                    <TranslateTransform x:Name="SlideTransform" Y="170" />
+                </Border.RenderTransform>
+                <StackPanel x:Name="HotPanel">
+                    <Button x:Name="TogglePanelButton" Content="▲" Width="50" Height="30"
+                HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,-15"
+                Background="Transparent" Foreground="White" BorderThickness="0"
+                Click="ToggleSlideUpPanel_Click" />
+                    <TextBlock Text="HotKeys" FontSize="24" Padding="10,10,10,20"
+                   VerticalAlignment="Center" Foreground="White"/>
+                    <TextBlock Text="Right Arrow: Next"/>
+                    <TextBlock Text="Left Arrow: Previous"/>
+                    <TextBlock Text="Down Arrow: Check Answer"/>
+                    <TextBlock Text="A, S, D, F: Radio Buttons"/>
+
+                </StackPanel>
+            </Border>
         </Grid>
+
     </DockPanel>
 </Window>

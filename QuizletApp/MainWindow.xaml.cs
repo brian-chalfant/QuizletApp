@@ -7,6 +7,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -39,11 +40,14 @@ namespace QuizletApp
         private List<string> recentFiles = new();
         //FilePath of Stored Recent Files
         private const string recentFilesPath = "recent.csv";
+        private bool isPanelVisible = false; // Tracks visibility state
+        public string hotk = "Right Arrow: Next \rLeft Arrow: Previous \rDown Arrow: Check Answer \r A, S, D, F: Radio Buttons";
 
         //Main Window Function  
         //Constructor
         public MainWindow()
         {
+
             InitializeComponent();
             DisplayQuestion(true);
             LoadRecentFiles();
@@ -54,7 +58,38 @@ namespace QuizletApp
 
 
         //RECENT FILE UTILITY FUNCTIONS----------------------------------------------------------------------------
+        private void ToggleSlideUpPanel()
+        {
+            DoubleAnimation animation = new DoubleAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+            };
 
+            if (isPanelVisible)
+            {
+                // Slide down (partially hidden)
+                animation.From = 0;  // Fully visible position
+                animation.To = 170; // Partially hidden
+            }
+            else
+            {
+                // Slide up (fully visible)
+                animation.From = 170; // Partially hidden
+                animation.To = 0;    // Fully visible
+            }
+
+            SlideTransform.BeginAnimation(TranslateTransform.YProperty, animation);
+            isPanelVisible = !isPanelVisible;
+
+            // Update arrow direction
+            TogglePanelButton.Content = isPanelVisible ? "▼" : "▲";
+        }
+
+        private void ToggleSlideUpPanel_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleSlideUpPanel();
+        }
         //If there are Values in the RecentFilesPath Global Variable Then Call UPdateRecentFilesMenu
         private void LoadRecentFiles()
         {
@@ -403,6 +438,7 @@ namespace QuizletApp
             SubmitButton.Visibility = Visibility.Collapsed;
             PrevButton.Visibility = Visibility.Collapsed;
             ScoreTextBlock.Text = $"You Scored {correctPercentage:F2}%!";
+
             ScoreTextBlock.Visibility = Visibility.Visible;
             NextButton.Content = "Restart";
         }
@@ -529,6 +565,7 @@ namespace QuizletApp
             Color OtherBtnColor;
             Color OtherBtnBorder;
             Color SubmitBtnBorder;
+            Color SlideUpPanelColor;
 
 
             if (Properties.Settings.Default.DarkMode)
@@ -542,7 +579,7 @@ namespace QuizletApp
                 OtherBtnColor = (Color)ColorConverter.ConvertFromString("#0056B3"); //Other Buttons
                 OtherBtnBorder = (Color)ColorConverter.ConvertFromString("#004085");  //Other Buttons Border
                 SubmitBtnBorder = (Color)ColorConverter.ConvertFromString("#0B6C35"); //SubmitButton Border
-
+                SlideUpPanelColor = (Color)ColorConverter.ConvertFromString("#2C3E50"); //SlideUpPanel
 
             } else
             {
@@ -556,6 +593,7 @@ namespace QuizletApp
                 OtherBtnColor = (Color)ColorConverter.ConvertFromString("#007BFF"); //Other Buttons
                 OtherBtnBorder = (Color)ColorConverter.ConvertFromString("#0069D9");  //Other Buttons Border
                 SubmitBtnBorder = (Color)ColorConverter.ConvertFromString("#218838"); //SubmitButton Border
+                SlideUpPanelColor = (Color)ColorConverter.ConvertFromString("#E3F2FD"); //SlideUpPanel
             }
 
             QAppMainWindow.Background = new SolidColorBrush(Background);
@@ -582,6 +620,16 @@ namespace QuizletApp
             SubmitButton.Background = new SolidColorBrush(SubmitBtnColor);
             SubmitButton.Foreground = new SolidColorBrush(Foreground);
             SubmitButton.BorderBrush = new SolidColorBrush(SubmitBtnBorder);
+            SlideUpPanel.Background = new SolidColorBrush(SlideUpPanelColor);
+            foreach (var child in HotPanel.Children)
+            {
+                if (child is TextBlock textBlock)
+                {
+                    textBlock.Foreground = new SolidColorBrush(Foreground);
+                }
+            }
+
+
         }
 
     }
