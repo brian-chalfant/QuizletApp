@@ -621,6 +621,7 @@ namespace QuizletApp
             SubmitButton.Foreground = new SolidColorBrush(Foreground);
             SubmitButton.BorderBrush = new SolidColorBrush(SubmitBtnBorder);
             SlideUpPanel.Background = new SolidColorBrush(SlideUpPanelColor);
+            TogglePanelButton.Foreground = new SolidColorBrush(Foreground);
             foreach (var child in HotPanel.Children)
             {
                 if (child is TextBlock textBlock)
