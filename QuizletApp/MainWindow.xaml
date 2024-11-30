@@ -4,9 +4,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="QuizletApp" Height="1026" Width="573" Foreground="White">
     <DockPanel>
-        <!-- Menu Bar -->
-        <Menu DockPanel.Dock="Top" Background="#3B4D61">
-            <MenuItem Header="_File" Background="#3B4D61" Foreground="White">
+        <Menu DockPanel.Dock="Top" Foreground="Black">
+            <!-- Menu Items -->
+            <MenuItem Header="_File">
                 <MenuItem Header="_Load CSV" Click="LoadCSV_Click"/>
                 <Separator/>
                 <MenuItem Header="_Recent" Name="RecentFilesMenu">
@@ -18,7 +18,8 @@
                 <Separator/>
                 <MenuItem Header="_Exit" Click="Exit_Click"/>
             </MenuItem>
-            <MenuItem Header="_Help" Background='#3B4D61' Foreground="White">
+
+            <MenuItem Header="_Help">
                 <MenuItem Header="Current Question Set" Click="ShowQuestionSet"/>
                 <MenuItem Header="Hotkeys" Click="ShowHotkey_Click"/>
                 <Separator/>
@@ -84,7 +85,7 @@
             </StackPanel>
 
             <DockPanel x:Name="StatusPanel" Grid.Row="5">
-                <StatusBar Height="24" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Background="#3B4D61" Foreground="White">
+                <StatusBar Height="24" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Foreground="Black">
                     <StatusBar.ItemsPanel>
                         <ItemsPanelTemplate>
                             <DockPanel />

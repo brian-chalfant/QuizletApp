@@ -4,6 +4,15 @@
              xmlns:local="clr-namespace:QuizletApp"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!-- Global Separator Style -->
+        <Style TargetType="Separator">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Separator">
+                        <Border Background="#2A3B50" Height="1" Margin="5,2" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

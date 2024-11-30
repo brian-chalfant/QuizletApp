@@ -58,5 +58,17 @@ namespace QuizletApp.Properties {
                 this["QRandomization"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LockCheckedQuestions {
+            get {
+                return ((bool)(this["LockCheckedQuestions"]));
+            }
+            set {
+                this["LockCheckedQuestions"] = value;
+            }
+        }
     }
 }

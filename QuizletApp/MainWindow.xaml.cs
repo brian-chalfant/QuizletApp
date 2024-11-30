@@ -36,11 +36,11 @@ namespace QuizletApp
         private int currentQuestionIndex = 0;
         //Holds user Answers <QuestionNumber, Answer> 
         private Dictionary<int, string> userAnswers = [];
+        private Dictionary<int, bool> userChecks = [];
         //Holds List of Recent Files
         private List<string> recentFiles = [];
         //FilePath of Stored Recent Files
         private const string recentFilesPath = "recent.csv";
-        private bool isPanelVisible = false; // Tracks visibility state
         public string hotk = "Right Arrow: Next \rLeft Arrow: Previous \rDown Arrow: Check Answer \r A, S, D, F: Radio Buttons";
 
         //Main Window Function  
@@ -121,6 +121,7 @@ namespace QuizletApp
             currentQuestionIndex = 0;  // Reset to first question
             userAnswers.Clear(); // Clear the stored user answers
                                  // Set the progress value for the circular progress bar
+            userChecks.Clear();
             SubmitButton.Visibility = Visibility.Visible;
             QuestionNumberBlock.Visibility = Visibility.Visible;
             QuestionTextBlock.Visibility = Visibility.Visible;
@@ -190,6 +191,16 @@ namespace QuizletApp
             foreach (var radioButton in AnswersPanel.Children.OfType<RadioButton>())
             {
                 radioButton.IsChecked = false;
+
+                if (userChecks.ContainsKey(currentQuestionIndex) && Properties.Settings.Default.LockCheckedQuestions)
+                {
+                    radioButton.IsEnabled = false;
+                }
+                else
+                {
+                    radioButton.IsEnabled = true;
+                }
+
             }
 
             // Check if the user already answered this question
@@ -217,37 +228,59 @@ namespace QuizletApp
             if (sender is RadioButton radioButton)
             {
                 // Save the selected answer for the current question
-                userAnswers[currentQuestionIndex] = radioButton.Content.ToString();
+                userAnswers[currentQuestionIndex] = radioButton.Content?.ToString()?.Trim();
             }
         }
 
-        //Checks the User's Answer to see if it is correct.
+        // Checks the User's Answer to see if it is correct.
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             // Get the selected answer
-            var selectedOption = AnswersPanel.Children.OfType<RadioButton>()
-                                    .FirstOrDefault(r => r.IsChecked == true)?.Content.ToString();
+            var selectedOption = AnswersPanel.Children
+                .OfType<RadioButton>()
+                .FirstOrDefault(r => r.IsChecked == true)?.Content?.ToString();
 
-            if (selectedOption == null)
+            // Check if lock setting is enabled
+            var isCheckLocked = Properties.Settings.Default.LockCheckedQuestions;
+            userChecks[currentQuestionIndex] = true;
+
+            // Alert the user if no answer is selected
+            if (string.IsNullOrWhiteSpace(selectedOption))
             {
                 MessageBox.Show("Please select an answer.");
                 return;
             }
 
+            // Highlight answers
+            HighlightAnswers(selectedOption, isCheckLocked);
+        }
 
+        // Highlights the correct and incorrect answers
+        private void HighlightAnswers(string selectedOption, bool isCheckLocked)
+        {
             foreach (var radioButton in AnswersPanel.Children.OfType<RadioButton>())
             {
-                if (radioButton.Content.ToString() == questions[currentQuestionIndex].CorrectAnswer.Trim())
+                var answerContent = radioButton.Content?.ToString()?.Trim();
+                if (string.IsNullOrEmpty(answerContent)) continue;
+
+                // Highlight the correct answer
+                if (answerContent == questions[currentQuestionIndex].CorrectAnswer.Trim())
                 {
                     radioButton.Foreground = new SolidColorBrush(Colors.Green);
                 }
-                else
+                // Highlight incorrect answers if selected
+                else if (answerContent == selectedOption)
                 {
                     radioButton.Foreground = new SolidColorBrush(Colors.Red);
                 }
+
+                // Lock answers if the setting is enabled
+                if (isCheckLocked)
+                {
+                    radioButton.IsEnabled = false;
+                }
             }
         }
-
         //Next Question
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
@@ -426,12 +459,14 @@ namespace QuizletApp
         private void PreferencesMenuItem_Click(object sender, RoutedEventArgs e)
         {
             PreferencesWindows preferencesWindows = new();
+            preferencesWindows.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             preferencesWindows.Show();
         }
 
         private void ShowAbout_Click(object sender, RoutedEventArgs e)
         {
             Window1 AboutWindow = new();
+            AboutWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             AboutWindow.Show();
         }
 
@@ -443,6 +478,7 @@ namespace QuizletApp
         private void ShowHotkey_Click(object sender, RoutedEventArgs e)
         {
             Window2 HotkeyWindow = new();
+            HotkeyWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             HotkeyWindow.Show();
         }
 
@@ -458,7 +494,10 @@ namespace QuizletApp
 
             if (radioButtonMapping.TryGetValue(e.Key, out RadioButton radioButton))
             {
-                radioButton.IsChecked = true;
+                if (radioButton != null && radioButton.IsEnabled)
+                {
+                    radioButton.IsChecked = true;
+                }
             }
         }
 
@@ -516,7 +555,7 @@ namespace QuizletApp
             {
                 Background = Colors.Black; //Background Color
                 DropShadow = Colors.Black;    //Drop Shadow
-                Foreground = Colors.White;  //Foreground
+                Foreground = (Color)ColorConverter.ConvertFromString("#ADD8E6");  //Foreground
                 QuestionNumber = Colors.LimeGreen;  //Question Number Color
                 SubmitBtnColor = (Color)ColorConverter.ConvertFromString("#1F8A55"); //SubmitButton
                 OtherBtnColor = (Color)ColorConverter.ConvertFromString("#0056B3"); //Other Buttons
@@ -525,8 +564,8 @@ namespace QuizletApp
                 SlideUpPanelColor = (Color)ColorConverter.ConvertFromString("#2C3E50"); //SlideUpPanel
 
                 // Add Gradient Stops
-                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 26, 61, 94), 0.0)); // #FF0055A5
-                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 0, 61, 115), 1.0)); // #FF003D73
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 0, 0, 0), 0.0)); // #FF0055A5
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 3, 2, 68), 1.0)); // #FF003D73
 
 
 

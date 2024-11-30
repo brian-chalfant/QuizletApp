@@ -24,25 +24,26 @@ namespace QuizletApp
             InitializeComponent();
             chkDarkMode.IsChecked = Properties.Settings.Default.DarkMode;
             chkAnswers.IsChecked = Properties.Settings.Default.ARandomization;
-            chkQustions.IsChecked = Properties.Settings.Default.QRandomization;
+            chkQuestions.IsChecked = Properties.Settings.Default.QRandomization;
+            chkLockedQuestions.IsChecked = Properties.Settings.Default.LockCheckedQuestions;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             // Save preferences logic
             bool isDarkModeEnabled = chkDarkMode.IsChecked ?? false;
-            bool areQuestionsRandomized = chkQustions.IsChecked ?? false;
+            bool areQuestionsRandomized = chkQuestions.IsChecked ?? false;
             bool areAnswersRandomized = chkAnswers.IsChecked ?? false;
+            bool areCheckedQuestionsLocked = chkLockedQuestions.IsChecked ?? false;
 
             // Example: Save to a settings file or application-level settings
             Properties.Settings.Default.DarkMode = isDarkModeEnabled;
             Properties.Settings.Default.ARandomization = areAnswersRandomized;
             Properties.Settings.Default.QRandomization = areAnswersRandomized;
+            Properties.Settings.Default.LockCheckedQuestions = areCheckedQuestionsLocked;
             Properties.Settings.Default.Save();
             var mainwindow = (MainWindow)Application.Current.MainWindow;
             mainwindow.SetTheme();
-
-            MessageBox.Show("Preferences saved successfully.");
             this.Close();
         }
     }
