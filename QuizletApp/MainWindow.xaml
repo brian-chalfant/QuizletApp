@@ -32,9 +32,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="55"/>
                 <!-- Question Number Score Panel-->
-                <RowDefinition Height="*" MinHeight="250"/>
+                <RowDefinition MinHeight="250"/>
                 <!-- Question Text -->
-                <RowDefinition Height="*" MinHeight="197"/>
+                <RowDefinition Height="Auto" MinHeight="313.08"/>
                 <!-- Answer Panel -->
                 <RowDefinition Height="75"/>
                 <!-- Navigation Buttons -->
@@ -45,26 +45,47 @@
 
             <Grid.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Offset="0.0" />
-                    <GradientStop Offset="1.0" />
+                    <GradientStop Offset="0.0" Color="White" />
+                    <GradientStop Offset="1.0" Color="Blue" />
+
+
                 </LinearGradientBrush>
             </Grid.Background>
 
-
+            <StackPanel Grid.Row="1" Grid.Column="0" Margin="20,0,20,0">
+                <TextBlock x:Name="QuestionTextBlock" Visibility="Collapsed" FontSize="20" TextWrapping="Wrap" Text="Lorem ipsum odor amet, consectetuer adipiscing elit. Pretium aptent accumsan sagittis primis nibh fringilla. Nec nam accumsan dictum quisque blandit nibh nisl efficitur lectus? Elementum porttitor mi diam, lacinia placerat pretium laoreet finibus. Nascetur habitasse platea quis sociosqu scelerisque, rhoncus blandit nisl. Phasellus penatibus aliquet ridiculus nec tempor condimentum. Praesent nec nullam libero vitae interdum dictumst sagittis. At nec erat hac taciti laoreet massa commodo fermentum. Elementum cubilia fringilla tincidunt senectus curae; habitasse ornare arcu." 
+                       TextAlignment="Center" FontFamily="Segoe UI" Height="Auto"/>
+            </StackPanel>
             <!-- Question Text -->
-            <TextBlock x:Name="QuestionTextBlock" FontSize="20" TextWrapping="Wrap" Text="Load Your CSV File" Margin="20"
-                       TextAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI" Grid.Row="1" Grid.Column="0"/>
+
 
             <!-- Answers Panel -->
-            <StackPanel x:Name="AnswersPanel" VerticalAlignment="Top" Grid.Row="2" Height="142" Margin="20,27,0,0">
-                <RadioButton x:Name="OptionA" Visibility="Collapsed" Margin="5" Content="Option A" FontSize="20"
-                             GroupName="Answers" Checked="RadioButton_Checked"/>
-                <RadioButton x:Name="OptionB" Visibility="Collapsed" Margin="5" Content="Option B" FontSize="20"
-                             GroupName="Answers" Checked="RadioButton_Checked"/>
-                <RadioButton x:Name="OptionC" Visibility="Collapsed" Margin="5" Content="Option C" FontSize="20"
-                             GroupName="Answers" Checked="RadioButton_Checked"/>
-                <RadioButton x:Name="OptionD" Visibility="Collapsed" Margin="5" Content="Option D" FontSize="20"
-                             GroupName="Answers" Checked="RadioButton_Checked"/>
+            <!-- Answers Panel -->
+            <StackPanel x:Name="AnswersPanel" VerticalAlignment="Top" Grid.Row="2" Margin="20,27,0,0">
+                <RadioButton x:Name="OptionA" Visibility="Collapsed" Margin="5" FontSize="20"
+                 GroupName="Answers" Checked="RadioButton_Checked">
+                    <TextBlock x:Name="OptionAText" Text="Lorem ipsum odor amet, consectetuer adipiscing elit. Turpis aenean ut tellus arcu magna blandit. Pretium ante hendrerit phasellus ante velit."
+                   TextWrapping="Wrap"/>
+                </RadioButton>
+
+                <RadioButton x:Name="OptionB" Visibility="Collapsed" Margin="5" FontSize="20"
+                 GroupName="Answers" Checked="RadioButton_Checked">
+                    <TextBlock x:Name="OptionBText" Text="Lorem ipsum odor amet, consectetuer adipiscing elit. Turpis aenean ut tellus arcu magna blandit. Pretium ante hendrerit phasellus ante velit."
+                   TextWrapping="Wrap"/>
+                </RadioButton>
+
+                <RadioButton x:Name="OptionC" Visibility="Collapsed" Margin="5" FontSize="20"
+                 GroupName="Answers" Checked="RadioButton_Checked">
+                    <TextBlock x:Name="OptionCText"  Text="Lorem ipsum odor amet, consectetuer adipiscing elit. Turpis aenean ut tellus arcu magna blandit. Pretium ante hendrerit phasellus ante velit."
+                   TextWrapping="Wrap"/>
+                </RadioButton>
+
+                <RadioButton x:Name="OptionD" Visibility="Collapsed" Margin="5" FontSize="20"
+                 GroupName="Answers" Checked="RadioButton_Checked">
+                    <TextBlock x:Name="OptionDText" Text="Lorem ipsum odor amet, consectetuer adipiscing elit. Turpis aenean ut tellus arcu magna blandit. Pretium ante hendrerit phasellus ante velit."
+                   TextWrapping="Wrap"/>
+                </RadioButton>
+
             </StackPanel>
             <!-- Score Panel-->
             <StackPanel x:Name="ScorePanel">
@@ -84,7 +105,7 @@
                         Background="#007BFF" Foreground="White" BorderBrush="#0069D9" BorderThickness="2" FontWeight="Bold" FontSize="16"/>
             </StackPanel>
 
-            <DockPanel x:Name="StatusPanel" Grid.Row="5">
+            <DockPanel x:Name="StatusPanel" Grid.Row="4" Margin="0,50,0,0" Grid.RowSpan="2">
                 <StatusBar Height="24" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Foreground="Black">
                     <StatusBar.ItemsPanel>
                         <ItemsPanelTemplate>

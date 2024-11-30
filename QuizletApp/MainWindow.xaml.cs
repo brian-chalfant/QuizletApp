@@ -138,10 +138,10 @@ namespace QuizletApp
             SubmitButton.Visibility = Visibility.Visible;
             QuestionTextBlock.Text = string.Empty;
             QuestionNumberBlock.Text = string.Empty;
-            OptionA.Content = string.Empty;
-            OptionB.Content = string.Empty;
-            OptionC.Content = string.Empty;
-            OptionD.Content = string.Empty;
+            OptionAText.Text = string.Empty;
+            OptionBText.Text = string.Empty;
+            OptionCText.Text = string.Empty;
+            OptionDText.Text = string.Empty;
 
         }
 
@@ -181,10 +181,10 @@ namespace QuizletApp
 
 
             QuestionTextBlock.Text = question.Text;
-            OptionA.Content = possibleAnswers[0];
-            OptionB.Content = possibleAnswers[1];
-            OptionC.Content = possibleAnswers[2];
-            OptionD.Content = possibleAnswers[3];
+            OptionAText.Text = possibleAnswers[0];
+            OptionBText.Text = possibleAnswers[1];
+            OptionCText.Text = possibleAnswers[2];
+            OptionDText.Text = possibleAnswers[3];
             QuestionNumberBlock.Text = (currentQuestionIndex + 1).ToString() + "/" + questions.Count.ToString();
 
             // Clear any existing radio button selection
@@ -228,7 +228,9 @@ namespace QuizletApp
             if (sender is RadioButton radioButton)
             {
                 // Save the selected answer for the current question
-                userAnswers[currentQuestionIndex] = radioButton.Content?.ToString()?.Trim();
+                var answerContent = radioButton.Content as TextBlock;
+                var answerText = answerContent?.Text?.Trim();
+                userAnswers[currentQuestionIndex] = answerText;
             }
         }
 
@@ -238,21 +240,24 @@ namespace QuizletApp
             // Get the selected answer
             var selectedOption = AnswersPanel.Children
                 .OfType<RadioButton>()
-                .FirstOrDefault(r => r.IsChecked == true)?.Content?.ToString();
+                .FirstOrDefault(r => r.IsChecked == true)?
+                .Content as TextBlock; // Extract the TextBlock
+
+            string selectedAnswer = selectedOption?.Text; // Get the text from the TextBlock
 
             // Check if lock setting is enabled
             var isCheckLocked = Properties.Settings.Default.LockCheckedQuestions;
             userChecks[currentQuestionIndex] = true;
 
             // Alert the user if no answer is selected
-            if (string.IsNullOrWhiteSpace(selectedOption))
+            if (string.IsNullOrWhiteSpace(selectedAnswer))
             {
                 MessageBox.Show("Please select an answer.");
                 return;
             }
 
             // Highlight answers
-            HighlightAnswers(selectedOption, isCheckLocked);
+            HighlightAnswers(selectedAnswer, isCheckLocked);
         }
 
         // Highlights the correct and incorrect answers
@@ -260,16 +265,18 @@ namespace QuizletApp
         {
             foreach (var radioButton in AnswersPanel.Children.OfType<RadioButton>())
             {
-                var answerContent = radioButton.Content?.ToString()?.Trim();
-                if (string.IsNullOrEmpty(answerContent)) continue;
+                var answerContent = radioButton.Content as TextBlock; // Extract the TextBlock
+                string answerText = answerContent?.Text?.Trim(); // Get the text from the TextBlock
+
+                if (string.IsNullOrEmpty(answerText)) continue;
 
                 // Highlight the correct answer
-                if (answerContent == questions[currentQuestionIndex].CorrectAnswer.Trim())
+                if (answerText == questions[currentQuestionIndex].CorrectAnswer.Trim())
                 {
                     radioButton.Foreground = new SolidColorBrush(Colors.Green);
                 }
                 // Highlight incorrect answers if selected
-                else if (answerContent == selectedOption)
+                else if (answerText == selectedOption)
                 {
                     radioButton.Foreground = new SolidColorBrush(Colors.Red);
                 }
