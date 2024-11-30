@@ -58,38 +58,7 @@ namespace QuizletApp
 
 
         //RECENT FILE UTILITY FUNCTIONS----------------------------------------------------------------------------
-        private void ToggleSlideUpPanel()
-        {
-            DoubleAnimation animation = new DoubleAnimation
-            {
-                Duration = new Duration(TimeSpan.FromSeconds(0.5)),
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
-            };
 
-            if (isPanelVisible)
-            {
-                // Slide down (partially hidden)
-                animation.From = 0;  // Fully visible position
-                animation.To = 170; // Partially hidden
-            }
-            else
-            {
-                // Slide up (fully visible)
-                animation.From = 170; // Partially hidden
-                animation.To = 0;    // Fully visible
-            }
-
-            SlideTransform.BeginAnimation(TranslateTransform.YProperty, animation);
-            isPanelVisible = !isPanelVisible;
-
-            // Update arrow direction
-            TogglePanelButton.Content = isPanelVisible ? "▼" : "▲";
-        }
-
-        private void ToggleSlideUpPanel_Click(object sender, RoutedEventArgs e)
-        {
-            ToggleSlideUpPanel();
-        }
         //If there are Values in the RecentFilesPath Global Variable Then Call UPdateRecentFilesMenu
         private void LoadRecentFiles()
         {
@@ -214,7 +183,7 @@ namespace QuizletApp
             OptionB.Content = possibleAnswers[1];
             OptionC.Content = possibleAnswers[2];
             OptionD.Content = possibleAnswers[3];
-            QuestionNumberBlock.Text = (currentQuestionIndex + 1).ToString();
+            QuestionNumberBlock.Text = (currentQuestionIndex + 1).ToString() + "/" + questions.Count.ToString();
 
             // Clear any existing radio button selection
             foreach (var radioButton in AnswersPanel.Children.OfType<RadioButton>())
@@ -456,6 +425,23 @@ namespace QuizletApp
             preferencesWindows.Show();
         }
 
+        private void ShowAbout_Click(object sender, RoutedEventArgs e)
+        {
+            Window1 AboutWindow = new();
+            AboutWindow.Show();
+        }
+
+        private void ShowQuestionSet(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ShowHotkey_Click(object sender, RoutedEventArgs e)
+        {
+            Window2 HotkeyWindow = new();
+            HotkeyWindow.Show();
+        }
+
         private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.A)
@@ -566,12 +552,17 @@ namespace QuizletApp
             Color OtherBtnBorder;
             Color SubmitBtnBorder;
             Color SlideUpPanelColor;
+            LinearGradientBrush gradientBrush = new LinearGradientBrush
+            {
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(0, 1)
+            };
+
 
 
             if (Properties.Settings.Default.DarkMode)
             {
-                Background = Colors.DarkSlateGray; //Background Color
-                QuestionNumberDropShadow = Colors.ForestGreen;  //QuestionNumber DropShadow color
+                Background = Colors.Black; //Background Color
                 DropShadow = Colors.Black;    //Drop Shadow
                 Foreground = Colors.White;  //Foreground
                 QuestionNumber = Colors.LimeGreen;  //Question Number Color
@@ -581,10 +572,17 @@ namespace QuizletApp
                 SubmitBtnBorder = (Color)ColorConverter.ConvertFromString("#0B6C35"); //SubmitButton Border
                 SlideUpPanelColor = (Color)ColorConverter.ConvertFromString("#2C3E50"); //SlideUpPanel
 
-            } else
+                // Add Gradient Stops
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 26, 61, 94), 0.0)); // #FF0055A5
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 0, 61, 115), 1.0)); // #FF003D73
+
+
+
+            }
+            else
             {
 
-                Background = Colors.LightSeaGreen; //Background Color
+                Background = Colors.White; //Background Color
                 QuestionNumberDropShadow = Colors.DarkGreen;  //QuestionNumber DropShadow color
                 DropShadow = Colors.Black;    //Drop Shadow
                 Foreground = Colors.Black;  //Foreground
@@ -594,16 +592,19 @@ namespace QuizletApp
                 OtherBtnBorder = (Color)ColorConverter.ConvertFromString("#0069D9");  //Other Buttons Border
                 SubmitBtnBorder = (Color)ColorConverter.ConvertFromString("#218838"); //SubmitButton Border
                 SlideUpPanelColor = (Color)ColorConverter.ConvertFromString("#E3F2FD"); //SlideUpPanel
+                                                                                        // Add Gradient Stops
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 0, 85, 165), 0.0)); // #FF0055A5
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 0, 61, 115), 1.0)); // #FF003D73
             }
 
             QAppMainWindow.Background = new SolidColorBrush(Background);
             QAppMainWindow.Foreground = new SolidColorBrush(Foreground);
             QuestionNumberBlock.Foreground = new SolidColorBrush(QuestionNumber);
-            QuestionNumberBlockdse.Color = QuestionNumberDropShadow;
-            LoadButtondse.Color = DropShadow;
-            PrevButtondse.Color = DropShadow;
-            NextButtondse.Color = DropShadow;
-            SubmitButtondse.Color = DropShadow;
+            //QuestionNumberBlockdse.Color = QuestionNumberDropShadow;
+            //LoadButtondse.Color = DropShadow;
+            //PrevButtondse.Color = DropShadow;
+            //NextButtondse.Color = DropShadow;
+            //SubmitButtondse.Color = DropShadow;
             OptionA.Foreground = new SolidColorBrush(Foreground);
             OptionB.Foreground = new SolidColorBrush(Foreground);
             OptionC.Foreground = new SolidColorBrush(Foreground);
@@ -620,15 +621,9 @@ namespace QuizletApp
             SubmitButton.Background = new SolidColorBrush(SubmitBtnColor);
             SubmitButton.Foreground = new SolidColorBrush(Foreground);
             SubmitButton.BorderBrush = new SolidColorBrush(SubmitBtnBorder);
-            SlideUpPanel.Background = new SolidColorBrush(SlideUpPanelColor);
-            TogglePanelButton.Foreground = new SolidColorBrush(Foreground);
-            foreach (var child in HotPanel.Children)
-            {
-                if (child is TextBlock textBlock)
-                {
-                    textBlock.Foreground = new SolidColorBrush(Foreground);
-                }
-            }
+
+            // Set the Background of the Grid (assuming the Grid is named "MainGrid")
+            MainGrid.Background = gradientBrush;
 
 
         }
