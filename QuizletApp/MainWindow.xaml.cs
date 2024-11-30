@@ -35,9 +35,9 @@ namespace QuizletApp
         //Index of Current Question
         private int currentQuestionIndex = 0;
         //Holds user Answers <QuestionNumber, Answer> 
-        private Dictionary<int, string> userAnswers = new();
+        private Dictionary<int, string> userAnswers = [];
         //Holds List of Recent Files
-        private List<string> recentFiles = new();
+        private List<string> recentFiles = [];
         //FilePath of Stored Recent Files
         private const string recentFilesPath = "recent.csv";
         private bool isPanelVisible = false; // Tracks visibility state
@@ -169,6 +169,7 @@ namespace QuizletApp
             possibleAnswers.Add(question.OptionB);
             possibleAnswers.Add(question.OptionC);
             possibleAnswers.Add(question.OptionD);
+            SetTheme();
 
             //Shuffle that list so correct answers are not always in the same place
             if (Properties.Settings.Default.ARandomization)
@@ -233,14 +234,17 @@ namespace QuizletApp
                 return;
             }
 
-            // Compare the selected answer to the correct answer
-            if (selectedOption.Trim().Equals(questions[currentQuestionIndex].CorrectAnswer.Trim(), StringComparison.OrdinalIgnoreCase))
+
+            foreach (var radioButton in AnswersPanel.Children.OfType<RadioButton>())
             {
-                MessageBox.Show("Correct!");
-            }
-            else
-            {
-                MessageBox.Show($"Incorrect! The correct answer is: {questions[currentQuestionIndex].CorrectAnswer}");
+                if (radioButton.Content.ToString() == questions[currentQuestionIndex].CorrectAnswer.Trim())
+                {
+                    radioButton.Foreground = new SolidColorBrush(Colors.Green);
+                }
+                else
+                {
+                    radioButton.Foreground = new SolidColorBrush(Colors.Red);
+                }
             }
         }
 
@@ -444,96 +448,44 @@ namespace QuizletApp
 
         private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.A)
+            var radioButtonMapping = new Dictionary<Key, RadioButton>
+    {
+        { Key.A, OptionA },
+        { Key.S, OptionB },
+        { Key.D, OptionC },
+        { Key.F, OptionD }
+    };
+
+            if (radioButtonMapping.TryGetValue(e.Key, out RadioButton radioButton))
             {
-                ClickRadioButton1();
-            }
-            else if (e.Key == Key.S)
-            {
-                ClickRadioButton2();
-            }
-            else if (e.Key == Key.D)
-            {
-                ClickRadioButton3();
-            }
-            else if (e.Key == Key.F)
-            {
-                ClickRadioButton4();
+                radioButton.IsChecked = true;
             }
         }
 
         //Keyboard Actions
+        // Add Hotkeys for Next, Previous, and Check
         private void AddHotKeys()
         {
             try
             {
-                RoutedCommand nextCommand = new();
-                nextCommand.InputGestures.Add(new KeyGesture(Key.Right, ModifierKeys.None));
-                CommandBindings.Add(new CommandBinding(nextCommand, NextButton_Click, CanExecuteAlways));
-
-                RoutedCommand prevCommand = new();
-                prevCommand.InputGestures.Add(new KeyGesture(Key.Left, ModifierKeys.None));
-                CommandBindings.Add(new CommandBinding(prevCommand, PrevButton_Click, CanExecuteAlways2));
-
-                RoutedCommand checkCommand = new();
-                checkCommand.InputGestures.Add(new KeyGesture(Key.Down, ModifierKeys.None));
-                CommandBindings.Add(new CommandBinding(checkCommand, SubmitButton_Click, CanExecuteAlways));
-
-
-
+                AddHotKey(Key.Right, NextButton_Click, NextButton);
+                AddHotKey(Key.Left, PrevButton_Click, PrevButton);
+                AddHotKey(Key.Down, SubmitButton_Click, SubmitButton);
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                Console.WriteLine("Something went wrong" + err.ToString());
+                Console.WriteLine($"Error adding hotkeys: {ex}");
             }
         }
 
-        private void CanExecuteAlways(object sender, CanExecuteRoutedEventArgs e)
+        // Helper Method for Adding HotKeys
+        private void AddHotKey(Key key, ExecutedRoutedEventHandler handler, Button associatedButton)
         {
-            if(NextButton.IsEnabled && NextButton.IsVisible)
-            {
-                e.CanExecute = true; // This ensures the command is always executable
-            } else
-            {
-                e.CanExecute = false;
-            }
-
-        }
-        private void CanExecuteAlways2(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (PrevButton.IsEnabled && PrevButton.IsVisible)
-            {
-                e.CanExecute = true; // This ensures the command is always executable
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
-
+            RoutedCommand command = new();
+            command.InputGestures.Add(new KeyGesture(key, ModifierKeys.None));
+            CommandBindings.Add(new CommandBinding(command, handler, (s, e) => e.CanExecute = associatedButton.IsEnabled && associatedButton.IsVisible));
         }
 
-        private void MyFirstEventHandler(object sender, ExecutedRoutedEventArgs e)
-        {
-            MessageBox.Show("Sent");
-            NextButton_Click(sender,e);
-        }
-
-        private void ClickRadioButton1()
-        {
-            OptionA.IsChecked = true;
-        }
-        private void ClickRadioButton2()
-        {
-            OptionB.IsChecked = true;
-        }
-        private void ClickRadioButton3()
-        {
-            OptionC.IsChecked = true;
-        }
-        private void ClickRadioButton4()
-        {
-            OptionD.IsChecked = true;
-        }
 
         public void SetTheme()
         {
