@@ -6,7 +6,7 @@
     <DockPanel>
         <!-- Menu Bar -->
         <Menu DockPanel.Dock="Top" Background="#3B4D61">
-            <MenuItem Header="_File" Background="#3B4D61" Foreground="Black">
+            <MenuItem Header="_File" Background="#3B4D61" Foreground="White">
                 <MenuItem Header="_Load CSV" Click="LoadCSV_Click"/>
                 <Separator/>
                 <MenuItem Header="_Recent" Name="RecentFilesMenu">
@@ -18,7 +18,7 @@
                 <Separator/>
                 <MenuItem Header="_Exit" Click="Exit_Click"/>
             </MenuItem>
-            <MenuItem Header="_Help" Background='#3B4D61'>
+            <MenuItem Header="_Help" Background='#3B4D61' Foreground="White">
                 <MenuItem Header="Current Question Set" Click="ShowQuestionSet"/>
                 <MenuItem Header="Hotkeys" Click="ShowHotkey_Click"/>
                 <Separator/>
