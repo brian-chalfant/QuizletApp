@@ -20,7 +20,6 @@
             </MenuItem>
 
             <MenuItem Header="_Help">
-                <MenuItem Header="Current Question Set" Click="ShowQuestionSet"/>
                 <MenuItem Header="Hotkeys" Click="ShowHotkey_Click"/>
                 <Separator/>
                 <MenuItem Header="About" Click="ShowAbout_Click"/>
@@ -112,9 +111,10 @@
                             <DockPanel />
                         </ItemsPanelTemplate>
                     </StatusBar.ItemsPanel>
-                    <TextBlock Text="Ready" Foreground="Green"  DockPanel.Dock="Left" Margin="10,0,0,0" VerticalAlignment="Center" />
-                    <TextBlock Text="QuizletApp © 2024 Brian Chalfant" DockPanel.Dock="Right" Margin="0,0,10,0" VerticalAlignment="Center" />
+                    <TextBlock x:Name="ReadyText" Text="Ready" Foreground="Green"  DockPanel.Dock="Left" Margin="10,0,0,0" VerticalAlignment="Center" />
                     <TextBlock x:Name="QuestionNumberBlock" Text="" DockPanel.Dock="Right" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="QuizName" Text="" DockPanel.Dock="Right" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="QuizletApp © 2024 Brian Chalfant" DockPanel.Dock="Right"/>
                 </StatusBar>
             </DockPanel>
         </Grid>

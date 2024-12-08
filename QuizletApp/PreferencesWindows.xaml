@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:QuizletApp"
         mc:Ignorable="d"
         Title="Preferences"
-        Height="300"
+        Height="325"
         Width="350">
 
     <Window.Resources>
@@ -48,8 +48,13 @@
             <CheckBox Content="Randomize Order of Questions" Name="chkQuestions"/>
             <CheckBox Content="Randomize Order of Answers" Name="chkAnswers"/>
             <CheckBox Content="Lock Checked Questions" Name="chkLockedQuestions"/>
+            <CheckBox Content="Quick Mode" Click="chkQuickMode_Click" ToolTip="Upon Checking, Question will Show Answer for X Seconds, then Automatically proceed to the next question" Name="chkQuickMode"/>
+            <DockPanel x:Name="QuickTime" Visibility="Collapsed">
+                <Label DockPanel.Dock="Left" VerticalAlignment="Bottom">QuickMode Time (sec)</Label>
+                <Slider  Minimum="1" Maximum="10" TickPlacement="TopLeft" IsSnapToTickEnabled="True" TickFrequency="1" Width="70" HorizontalAlignment="Left" Margin="25,10,0,0" Name="sldQuickModeNumber" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0"/>
 
-            <!-- Save Button -->
+            </DockPanel>
+ <!-- Save Button -->
             <Button Content="Save" Name="btnSave" HorizontalAlignment="Center" Click="btnSave_Click" Margin="10" />
         </StackPanel>
     </Grid>

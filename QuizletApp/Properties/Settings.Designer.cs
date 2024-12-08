@@ -70,5 +70,29 @@ namespace QuizletApp.Properties {
                 this["LockCheckedQuestions"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool QuikMode {
+            get {
+                return ((bool)(this["QuikMode"]));
+            }
+            set {
+                this["QuikMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int QuickModeTime {
+            get {
+                return ((int)(this["QuickModeTime"]));
+            }
+            set {
+                this["QuickModeTime"] = value;
+            }
+        }
     }
 }

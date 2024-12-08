@@ -14,8 +14,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CsvHelper;
 using CsvHelper.Configuration;
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.Win32;
 using static System.Formats.Asn1.AsnWriter;
+using Path = System.IO.Path;
 
 namespace QuizletApp
 {
@@ -39,6 +41,7 @@ namespace QuizletApp
         private Dictionary<int, bool> userChecks = [];
         //Holds List of Recent Files
         private List<string> recentFiles = [];
+        private List<RadioButton> lstRadioButtons = new List<RadioButton>();
         //FilePath of Stored Recent Files
         private const string recentFilesPath = "recent.csv";
         public string hotk = "Right Arrow: Next \rLeft Arrow: Previous \rDown Arrow: Check Answer \r A, S, D, F: Radio Buttons";
@@ -54,6 +57,12 @@ namespace QuizletApp
             AddHotKeys();
             SetTheme();
             this.PreviewKeyDown += MainWindow_PreviewKeyDown;
+            ReadyText.Text = "Not Ready";
+            ReadyText.Foreground = new SolidColorBrush(Colors.Red);
+            lstRadioButtons.Add(OptionA);
+            lstRadioButtons.Add(OptionB);
+            lstRadioButtons.Add(OptionC);   
+            lstRadioButtons.Add(OptionD);
         }
 
 
@@ -142,6 +151,8 @@ namespace QuizletApp
             OptionBText.Text = string.Empty;
             OptionCText.Text = string.Empty;
             OptionDText.Text = string.Empty;
+            ReadyText.Text = "Ready";
+            ReadyText.Foreground = new SolidColorBrush(Colors.Green);
 
         }
 
@@ -188,7 +199,7 @@ namespace QuizletApp
             QuestionNumberBlock.Text = (currentQuestionIndex + 1).ToString() + "/" + questions.Count.ToString();
 
             // Clear any existing radio button selection
-            foreach (var radioButton in AnswersPanel.Children.OfType<RadioButton>())
+            foreach (var radioButton in lstRadioButtons)
             {
                 radioButton.IsChecked = false;
 
@@ -208,11 +219,16 @@ namespace QuizletApp
             {
                 string selectedAnswer = userAnswers[currentQuestionIndex];
                 // Check the radio button corresponding to the user's answer
-                foreach (var radioButton in AnswersPanel.Children.OfType<RadioButton>())
+                foreach (var radioButton in lstRadioButtons)
                 {
-                    if (radioButton.Content.ToString() == selectedAnswer)
+                    // Ensure the Content is a TextBlock
+                    if (radioButton.Content is TextBlock textBlock)
                     {
-                        radioButton.IsChecked = true;
+                        string text = textBlock.Text;
+                        if (text.Trim() == selectedAnswer.Trim())
+                        {
+                            radioButton.IsChecked = true;
+                        }
                     }
                 }
             }
@@ -235,7 +251,7 @@ namespace QuizletApp
         }
 
         // Checks the User's Answer to see if it is correct.
-        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        private async void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             // Get the selected answer
             var selectedOption = AnswersPanel.Children
@@ -248,6 +264,8 @@ namespace QuizletApp
             // Check if lock setting is enabled
             var isCheckLocked = Properties.Settings.Default.LockCheckedQuestions;
             userChecks[currentQuestionIndex] = true;
+            var isQuickModeEnabled = Properties.Settings.Default.QuikMode;
+            var quickModeTime = Properties.Settings.Default.QuickModeTime;
 
             // Alert the user if no answer is selected
             if (string.IsNullOrWhiteSpace(selectedAnswer))
@@ -257,11 +275,28 @@ namespace QuizletApp
             }
 
             // Highlight answers
-            HighlightAnswers(selectedAnswer, isCheckLocked);
+             await HighlightAnswers(selectedAnswer, isCheckLocked);
+            if (isQuickModeEnabled)
+            {
+                DelayedNext(quickModeTime, sender, e);
+                
+            }
         }
 
+        public async void DelayedNext(int quickModeTime, object sender, RoutedEventArgs e)
+        {
+            NextButton.IsEnabled = false;
+            PrevButton.IsEnabled = false;
+            await Task.Delay(quickModeTime * 1000);
+            NextButton_Click(sender, e);
+            NextButton.IsEnabled = true;
+            PrevButton.IsEnabled = true;
+
+        }
+
+
         // Highlights the correct and incorrect answers
-        private void HighlightAnswers(string selectedOption, bool isCheckLocked)
+        private async Task HighlightAnswers(string selectedOption, bool isCheckLocked)
         {
             foreach (var radioButton in AnswersPanel.Children.OfType<RadioButton>())
             {
@@ -285,8 +320,10 @@ namespace QuizletApp
                 if (isCheckLocked)
                 {
                     radioButton.IsEnabled = false;
-                }
+
             }
+            }
+
         }
         //Next Question
         private void NextButton_Click(object sender, RoutedEventArgs e)
@@ -301,6 +338,8 @@ namespace QuizletApp
                 {
                     ShowScore();
                     NextButton.Content = "Restart";
+                    ReadyText.Text = "Not Ready";
+                    ReadyText.Foreground = new SolidColorBrush(Colors.Red);
 
                 }
 
@@ -402,7 +441,7 @@ namespace QuizletApp
                 }))
                 {
                     questions = csv.GetRecords<Question>().ToList();
-                    MessageBox.Show($"Successfully loaded {questions.Count} questions.");
+                    QuizName.Text = Path.GetFileName(filePath);
                     Random rg = new();
                     questions.Shuffle<Question>(rg);
                 }
@@ -625,6 +664,7 @@ namespace QuizletApp
 
 
         }
+
 
     }
 

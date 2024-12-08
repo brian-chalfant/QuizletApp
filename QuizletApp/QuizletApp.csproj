@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="33.0.1" />
+    <PackageReference Include="Uno.UI" Version="5.5.87" />
   </ItemGroup>
 
   <ItemGroup>
